@@ -1,4 +1,4 @@
-"""Render the README / docs results tables from ``analytics/runs/runs.csv``.
+"""Render the README / docs results tables from ``runs/runs.csv``.
 
     python -m abkit.readme_results --check    # exit 1 when a file is stale
     python -m abkit.readme_results --write    # rewrite the block between the markers
@@ -18,12 +18,12 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
+from abkit import paths
 from abkit.runs import RUNS_CSV_PATH
 
 START_MARKER = "<!-- results:start -->"
 END_MARKER = "<!-- results:end -->"
-_ABKIT_DIR = Path(__file__).resolve().parents[2]
-DEFAULT_FILES = (_ABKIT_DIR / "README.md", _ABKIT_DIR / "docs/results.md")
+DEFAULT_FILES = (paths.README, paths.DOCS_DIR / "results.md")
 
 
 @dataclass(frozen=True)

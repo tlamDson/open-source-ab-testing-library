@@ -16,6 +16,7 @@ import pytest
 from conftest import GOLDEN_LATEST
 from criteo_fixtures import CRITEO_RAW, write_criteo_like
 
+from abkit import paths
 from abkit.criteo import CRITEO_PAGE_URL, CRITEO_PAPER_URL, CRITEO_SHA256, CRITEO_URL
 from abkit.golden.case import GoldenFormatError, load_case, load_dataset
 from abkit.golden.freeze_criteo import CASE_NAME, GENERATOR, PUBLISHED, freeze_criteo
@@ -73,8 +74,8 @@ def test_abkit_reproduces_the_published_criteo_figures() -> None:
 
 
 def test_criteo_freezer_never_imports_the_abkit_engine() -> None:
-    allowed = {"abkit.golden.case", "abkit.criteo"}
-    path = Path(__file__).resolve().parents[1] / "src/abkit/golden/freeze_criteo.py"
+    allowed = {"abkit.golden.case", "abkit.criteo", "abkit.paths"}
+    path = paths.PACKAGE_DIR / "golden/freeze_criteo.py"
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imported = set()
     for node in ast.walk(tree):

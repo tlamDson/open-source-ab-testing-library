@@ -1,7 +1,7 @@
 """B2 plan, PR 23 (optional): R's testthat suite re-checks the G-ref golden answers.
 
 R is not installed in CI, so this test skips there; locally it runs
-``analytics/abkit/r/run.R`` and needs the testthat and jsonlite packages.
+``r/run.R`` and needs the testthat and jsonlite packages.
 """
 
 from __future__ import annotations
@@ -10,11 +10,12 @@ import glob
 import os
 import shutil
 import subprocess
-from pathlib import Path
 
 import pytest
 
-R_DIR = Path(__file__).resolve().parents[1] / "r"
+from abkit import paths
+
+R_DIR = paths.REPO_ROOT / "r"
 
 
 def find_rscript() -> str | None:
@@ -52,7 +53,7 @@ def test_r_testthat_suite_agrees_with_golden_to_1e_8() -> None:
     if missing:
         pytest.skip(f"R packages not installed: {', '.join(missing)} (install.packages(...))")
     # Rscript segfaults on a missing script, so check the entry point first.
-    assert (R_DIR / "run.R").is_file(), "analytics/abkit/r/run.R is missing"
+    assert (R_DIR / "run.R").is_file(), "r/run.R is missing"
     result = subprocess.run(
         [RSCRIPT, str(R_DIR / "run.R")],
         cwd=R_DIR,
@@ -61,6 +62,7 @@ def test_r_testthat_suite_agrees_with_golden_to_1e_8() -> None:
         encoding="utf-8",
         errors="replace",
         timeout=300,
+        env={**os.environ, "ABKIT_GOLDEN_DIR": str(paths.GOLDEN_LATEST)},
     )
     assert result.returncode == 0, result.stdout + result.stderr
     assert "FAIL 0" in result.stdout

@@ -2,7 +2,7 @@
 
 Data are drawn from ``numpy.random.default_rng(seed)`` and rounded to 4
 decimals, so ``data.csv`` holds the exact numbers the truth was computed from.
-``abkit.golden.freeze_ref`` turns these into ``analytics/golden/v2`` (the latest).
+``abkit.golden.freeze_ref`` turns these into ``golden/v2`` (the latest).
 Changing any case here means a new dataset version (v3), not an edit of v2.
 """
 

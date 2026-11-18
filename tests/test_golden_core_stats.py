@@ -1,12 +1,12 @@
 """PR 10 must pass G-ref for Welch, delta method, SRM and power/MDE (B2 plan)."""
 
 import ast
-from pathlib import Path
 
 import numpy as np
 import pytest
 from conftest import GOLDEN_LATEST, GOLDEN_V1
 
+from abkit import paths
 from abkit.golden.methods import IMPLEMENTATIONS
 from abkit.golden.runner import Status, run_golden
 
@@ -20,7 +20,7 @@ CORE_METHODS = {
     "sample_size_proportions",
 }
 CORE_GROUPS = {"welch", "delta", "srm", "power"}
-STATS_DIR = Path(__file__).resolve().parents[1] / "src/abkit/stats"
+STATS_DIR = paths.PACKAGE_DIR / "stats"
 
 
 def test_core_methods_are_registered() -> None:

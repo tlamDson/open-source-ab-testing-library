@@ -6,7 +6,7 @@
 Hillstrom: ``--reps`` biased resamples of the real RCT (``abkit.causal.hillstrom``); the
 benchmark is the full-RCT difference in means. LaLonde: each method on NSW treated + PSID-1
 controls (the committed G-public cases), against the published experimental $1,794.
-Rows go to ``analytics/runs/runs.csv`` with ``metric_id`` M6; both use real people, so
+Rows go to ``runs/runs.csv`` with ``metric_id`` M6; both use real people, so
 ``simulated`` is false (the Hillstrom selection is synthetic, the users are not).
 """
 
@@ -21,6 +21,7 @@ from pathlib import Path
 
 import numpy as np
 
+from abkit import paths
 from abkit.bench import _git_sha
 from abkit.causal.estimators import CausalResult
 from abkit.causal.fit import METHODS, estimate_effect
@@ -28,7 +29,7 @@ from abkit.causal.hillstrom import HILLSTROM_COVARIATES, biased_sample, load_hil
 from abkit.golden.case import load_case
 from abkit.runs import RUNS_CSV_PATH, RunRecord, append_run
 
-GOLDEN_ROOT = Path(__file__).resolve().parents[4] / "golden/v2"
+GOLDEN_ROOT = paths.GOLDEN_LATEST
 LALONDE_BENCHMARK_CASE = "public/lalonde-experimental"
 LALONDE_CASES = {m: f"public/lalonde-psid-{m.split('_')[0]}" for m in METHODS}
 

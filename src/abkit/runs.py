@@ -1,4 +1,4 @@
-"""The ``analytics/runs/runs.csv`` ledger.
+"""The ``runs/runs.csv`` ledger.
 
 Every number quoted in a README must come from a row here (CLAUDE.md, honest
 numbers). ``simulated`` marks rows measured on simulated / virtual users so
@@ -13,7 +13,9 @@ from dataclasses import astuple, dataclass, fields
 from datetime import datetime
 from pathlib import Path
 
-RUNS_CSV_PATH = Path(__file__).resolve().parents[3] / "runs/runs.csv"
+from abkit import paths
+
+RUNS_CSV_PATH = paths.RUNS_CSV
 
 
 @dataclass(frozen=True)

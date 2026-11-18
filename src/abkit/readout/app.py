@@ -1,6 +1,6 @@
 """Streamlit readout app (``[app]`` extra): pick a golden readout case or a CSV + params.
 
-    analytics/.venv/Scripts/python -m streamlit run analytics/abkit/src/abkit/readout/app.py
+    python -m streamlit run src/abkit/readout/app.py
 
 The memo is the same Markdown as ``abkit readout``; an SRM failure also shows a red banner.
 """

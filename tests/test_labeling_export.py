@@ -18,7 +18,7 @@ from abkit.labeling import (
 )
 from abkit.readout import load_readout_input
 
-COMMITTED = REPO_ROOT / "analytics/golden/decide/v1"
+COMMITTED = REPO_ROOT / "golden/decide/v1"
 #: Words of abkit's own conclusion; none may reach a blinded readout.
 CONCLUSION_WORDS = (
     "Decision:",

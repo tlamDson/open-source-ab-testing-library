@@ -31,11 +31,12 @@ from abkit.criteo import (
     file_sha256,
 )
 from abkit.golden.case import GoldenFormatError, load_case
+from abkit.paths import GOLDEN_LATEST
 
 GENERATOR = "abkit.golden.freeze_criteo"
 GROUP = "criteo"
 CASE_NAME = "v21-key-figures"
-DEFAULT_ROOT = Path(__file__).resolve().parents[4] / "golden/v2"
+DEFAULT_ROOT = GOLDEN_LATEST
 
 #: Criteo AI Lab page, "Key figures" of the un-biased file (checked against the raw file).
 PUBLISHED = {

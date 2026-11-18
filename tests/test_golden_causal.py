@@ -14,6 +14,7 @@ import numpy as np
 import pytest
 from conftest import GOLDEN_LATEST
 
+from abkit import paths
 from abkit.golden.case import KNOWN_METHODS, load_case, load_dataset
 from abkit.golden.freeze_lalonde import RAW_FILES, build_lalonde_cases, freeze_lalonde
 from abkit.golden.methods import IMPLEMENTATIONS
@@ -167,7 +168,7 @@ def test_committed_cases_match_the_raw_dehejia_wahba_files() -> None:
 
 
 def test_lalonde_freezer_never_imports_the_abkit_engine() -> None:
-    path = Path(__file__).resolve().parents[1] / "src/abkit/golden/freeze_lalonde.py"
+    path = paths.PACKAGE_DIR / "golden/freeze_lalonde.py"
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imported = set()
     for node in ast.walk(tree):
@@ -175,4 +176,4 @@ def test_lalonde_freezer_never_imports_the_abkit_engine() -> None:
             imported.add(node.module)
         elif isinstance(node, ast.Import):
             imported.update(alias.name for alias in node.names)
-    assert {m for m in imported if m.startswith("abkit")} <= {"abkit.golden.case"}
+    assert {m for m in imported if m.startswith("abkit")} <= {"abkit.golden.case", "abkit.paths"}

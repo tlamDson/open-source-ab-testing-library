@@ -35,9 +35,10 @@ import numpy as np
 
 from abkit.golden.case import GoldenFormatError, load_case
 from abkit.hillstrom import HILLSTROM_SHA256, HILLSTROM_URL, load_hillstrom, two_arms
+from abkit.paths import GOLDEN_LATEST
 
 GENERATOR = "abkit.golden.freeze_public"
-DEFAULT_ROOT = Path(__file__).resolve().parents[4] / "golden/v2"
+DEFAULT_ROOT = GOLDEN_LATEST
 GROUP = "hillstrom"
 RADCLIFFE_URL = "http://minethatdata.com/Stochastic_Solutions_E-Mail_Challenge_2008.04.30.pdf"
 _N = {"n_control": 21306, "n_treatment": 21307}
