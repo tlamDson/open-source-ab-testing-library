@@ -3,6 +3,8 @@
 The distribution `abkit-experiments` is published to PyPI by
 `.github/workflows/release-abkit.yml` through PyPI Trusted Publishing: no token is
 stored anywhere. The workflow runs only when a tag `abkit-v<version>` is pushed.
+It is not in this repository yet: the owner adds it with the one-time setup below, and
+its tests in `tests/test_release_packaging.py` skip until then.
 
 1. Bump `version` in `pyproject.toml` and `__version__` in `src/abkit/__init__.py`
    (a test keeps them equal), refresh the results (`python -m abkit.readme_results --write`),
@@ -13,6 +15,6 @@ stored anywhere. The workflow runs only when a tag `abkit-v<version>` is pushed.
    then the `publish` job (GitHub environment `pypi`) uploads them.
 
 One-time setup, by the repository owner: on PyPI add a pending trusted publisher for
-project `abkit-experiments` (owner `tlamDson`, repository `TravelPlan`, workflow
+project `abkit-experiments` (owner `tlamDson`, repository `open-source-ab-testing-library`, workflow
 `release-abkit.yml`, environment `pypi`), and create the `pypi` environment in the
 repository settings (a required reviewer there makes every release a manual approval).

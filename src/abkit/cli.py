@@ -24,6 +24,7 @@ from collections.abc import Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 
+from abkit import paths
 from abkit.actions.cli import add_actions_panel
 from abkit.bench import _git_sha
 from abkit.golden.case import GoldenFormatError
@@ -33,7 +34,7 @@ from abkit.labeling.cli import add_decide
 from abkit.readout.inputs import load_readout_input
 from abkit.runs import RUNS_CSV_PATH, append_run
 
-DEFAULT_GOLDEN_ROOT = Path(__file__).resolve().parents[3] / "golden/v2"
+DEFAULT_GOLDEN_ROOT = paths.GOLDEN_LATEST
 
 
 def _golden(args: argparse.Namespace) -> int:

@@ -25,7 +25,7 @@ from abkit.golden.runner import Status, run_golden
 from abkit.runs import RunRecord
 
 GATE_SUBSET = "ci-fast"
-#: Group prefix of the SIMULATED G-sim cases (``analytics/golden/README.md``).
+#: Group prefix of the SIMULATED G-sim cases (``golden/README.md``).
 SIM_PREFIX = "sim-"
 
 #: Runs in the child: import abkit from the copy (argv[1]) or refuse, then the golden CLI.

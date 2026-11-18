@@ -5,7 +5,7 @@ source(file.path("..", "..", "R", "crosscheck.R"))
 CROSSCHECK_TOL <- 1e-8
 
 golden_dir <- function() {
-  dir <- Sys.getenv("ABKIT_GOLDEN_DIR", file.path("..", "..", "..", "..", "golden", "v2"))
+  dir <- Sys.getenv("ABKIT_GOLDEN_DIR", file.path("..", "..", "..", "golden", "v2"))
   normalizePath(dir, mustWork = TRUE)
 }
 

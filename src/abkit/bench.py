@@ -1,4 +1,4 @@
-"""Run a named benchmark and append its result to ``analytics/runs/runs.csv``.
+"""Run a named benchmark and append its result to ``runs/runs.csv``.
 
     python -m abkit.bench assignment --pr 9 [--repeats 5] [--dry-run]
 

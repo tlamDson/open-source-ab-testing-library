@@ -1,6 +1,6 @@
 # Results
 
-Every number here is a row of `analytics/runs/runs.csv`, rendered by
+Every number here is a row of `runs/runs.csv`, rendered by
 `python -m abkit.readme_results --write`; a test fails when this page is stale.
 Simulated users are never mixed with real ones.
 

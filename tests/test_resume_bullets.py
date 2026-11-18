@@ -3,11 +3,11 @@
 import csv
 import re
 from decimal import Decimal
-from pathlib import Path
 
+from abkit import paths
 from abkit.runs import RUNS_CSV_PATH
 
-BULLETS = Path(__file__).resolve().parents[2] / "runs/resume-bullets.md"
+BULLETS = paths.RUNS_DIR / "resume-bullets.md"
 SOURCE_ROW = re.compile(r"^\| `(?P<metric>[a-z0-9_\-]+)`\s*\| (?P<value>-?[0-9.e+-]+)\s*\|", re.M)
 
 

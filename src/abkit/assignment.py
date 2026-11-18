@@ -6,8 +6,8 @@ Mirrors ``backend/src/features/experiments/services/assignment.ts``::
 
 Buckets below ``holdout_buckets`` get the holdout; the rest walk the variants'
 cumulative integer weights in declared order. ``parse_definition`` applies the
-rules of ``experimentDefinitionSchema`` in ``packages/shared``, and
-``packages/shared/fixtures/assignment-vectors.json`` pins 10,000 results that
+rules of TravelPlan's ``experimentDefinitionSchema`` (TypeScript), and
+``fixtures/assignment-vectors.json`` pins 10,000 results that
 both languages must reproduce.
 """
 
@@ -21,11 +21,11 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from abkit import paths
+
 BUCKET_COUNT = 10_000
 HOLDOUT_VARIANT = "holdout"
-VECTORS_PATH = (
-    Path(__file__).resolve().parents[4] / "packages/shared/fixtures/assignment-vectors.json"
-)
+VECTORS_PATH = paths.ASSIGNMENT_VECTORS
 
 _SLUG = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 _SALT = re.compile(r"^[^:]+$")
@@ -77,7 +77,7 @@ def _int_in(value: object, field: str, low: int, high: int) -> int:
 
 
 def parse_definition(raw: Mapping[str, Any]) -> ExperimentDefinition:
-    """Validate a JSON experiment definition (camelCase, as in packages/shared)."""
+    """Validate a JSON experiment definition (camelCase, as in the TypeScript schema)."""
     unknown = set(raw) - _DEFINITION_FIELDS
     if unknown:
         raise ValueError(f"unknown experiment fields: {sorted(unknown)}")

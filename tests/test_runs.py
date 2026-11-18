@@ -25,8 +25,8 @@ def _record(**overrides: object) -> RunRecord:
     return RunRecord(**fields)  # type: ignore[arg-type]
 
 
-def test_runs_csv_lives_in_analytics_runs(repo_root: Path) -> None:
-    assert repo_root / "analytics/runs/runs.csv" == RUNS_CSV_PATH
+def test_runs_csv_lives_in_runs(repo_root: Path) -> None:
+    assert repo_root / "runs/runs.csv" == RUNS_CSV_PATH
 
 
 def test_committed_runs_csv_has_the_ledger_header() -> None:

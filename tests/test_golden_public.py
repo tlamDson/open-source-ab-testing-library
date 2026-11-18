@@ -13,6 +13,7 @@ from pathlib import Path
 import pytest
 from conftest import GOLDEN_LATEST, HILLSTROM_RAW, write_hillstrom_like
 
+from abkit import paths
 from abkit.golden.case import GoldenFormatError, load_case, load_dataset
 from abkit.golden.freeze_public import (
     GENERATOR,
@@ -96,8 +97,8 @@ def test_cuped_is_no_longer_missing_from_the_latest_dataset() -> None:
 
 
 def test_public_freezer_never_imports_the_abkit_engine() -> None:
-    allowed = {"abkit.golden.case", "abkit.hillstrom"}
-    path = Path(__file__).resolve().parents[1] / "src/abkit/golden/freeze_public.py"
+    allowed = {"abkit.golden.case", "abkit.hillstrom", "abkit.paths"}
+    path = paths.PACKAGE_DIR / "golden/freeze_public.py"
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imported = set()
     for node in ast.walk(tree):

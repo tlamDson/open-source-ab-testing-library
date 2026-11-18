@@ -2,9 +2,9 @@
 
 Modules and commands:
 
-- `abkit.assignment`: deterministic variant assignment. It matches the server
+- `abkit.assignment`: deterministic variant assignment. It matches TravelPlan's server
   (`backend/src/features/experiments/services/assignment.ts`) on all rows of
-  `packages/shared/fixtures/assignment-vectors.json`.
+  `fixtures/assignment-vectors.json`.
 - `abkit.stats`: Welch's t-test, the delta method for ratio metrics, the SRM
   chi-square check (threshold `p < 0.0005`), and power / sample size / MDE for
   the two-sample t-test and two proportions (Cohen's h). Estimates are
@@ -46,7 +46,7 @@ Modules and commands:
   `--real`; the Streamlit app (`[app]` extra) shows the same memo.
 - `abkit.labeling` (PR 15b, G-decide): `abkit decide export` writes 30 blinded
   readouts (28 G-sim cases drawn per group with a fixed seed, plus 2 real Hillstrom
-  readouts) to `analytics/golden/decide/v1/`, with abkit's decision and the case name
+  readouts) to `golden/decide/v1/`, with abkit's decision and the case name
   hidden and every effect shown, also when SRM fails. `abkit decide label` shows them one
   at a time and saves Lam's ship / no ship / investigate to `labels.csv`, resuming where
   it stopped. `abkit decide kappa` reports Cohen's kappa of those labels against the memo
@@ -59,17 +59,20 @@ Modules and commands:
   waits for its reset). Frame: non-fork repositories with 100–2000 stars, the first 300
   search results per creation month 2014-01..2017-12; 400 of them drawn with seed 18.
   Adoption is the oldest default-branch commit touching `.github/workflows`. The compact
-  panel in `analytics/data/actions_panel/` has one row per repo and month 2018-01..2022-12:
+  panel in `data/actions_panel/` has one row per repo and month 2018-01..2022-12:
   merged non-bot PRs created that month, median and mean `log1p` hours to merge, months
   since adoption and `treated`; `repos.csv` lists every sampled repo (also the missing ones)
   and `meta.json` the seed, queries and counts. Search ranks by stars inside the band, so
   the frame leans to the upper end of it.
-- `abkit.runs`: the `analytics/runs/runs.csv` ledger. Every number quoted in a
+- `abkit.paths`: every default repository path (`golden/`, `data/`, `runs/`,
+  `fixtures/`). An installed (not editable) package has no checkout around it: set
+  `ABKIT_ROOT` to one.
+- `abkit.runs`: the `runs/runs.csv` ledger. Every number quoted in a
   README must come from a row in that file.
 - `abkit.bench`: runs a named benchmark and appends its result to `runs.csv`.
 - `abkit golden`: runs abkit on every case of a golden dataset (default
-  `analytics/golden/v2`) and prints pass/fail by each case's tolerance. Format,
-  methods and freezing: `analytics/golden/README.md`.
+  `golden/v2`) and prints pass/fail by each case's tolerance. Format,
+  methods and freezing: `golden/README.md`.
 - `abkit.criteo`: the Criteo Uplift v2.1 file (CC BY-NC-SA, kept under
   `D:/data/b2/criteo/`, never committed), read in chunks with its sha256
   checked, arm totals, and a seeded row sample saved as `.npz`.
@@ -95,7 +98,7 @@ Modules and commands:
 - `r/` (optional): an R `testthat` suite that recomputes every G-ref Welch,
   CUPED and delta case with base R (`t.test`, `cov`, `pnorm`) and requires
   `|R - golden| <= 1e-8` on every expected key. Needs R with `testthat` and
-  `jsonlite`; run `Rscript analytics/abkit/r/run.R`. `tests/test_r_crosscheck.py`
+  `jsonlite`; run `Rscript r/run.R`. `tests/test_r_crosscheck.py`
   runs it when `Rscript` is found (`ABKIT_RSCRIPT`, `PATH`, or
   `C:/Program Files/R`) and skips otherwise, so CI (no R) skips it; it also
   skips when `testthat` or `jsonlite` is missing. `test-mutations.R` proves the

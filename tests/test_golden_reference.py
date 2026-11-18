@@ -12,6 +12,7 @@ from pathlib import Path
 import pytest
 from conftest import GOLDEN_LATEST, GOLDEN_V1
 
+from abkit import paths
 from abkit.golden.case import GoldenFormatError, load_case, load_dataset
 from abkit.golden.compare import compare_outputs
 from abkit.golden.freeze_ref import DEFAULT_ROOT, freeze, render_csv
@@ -104,8 +105,13 @@ def test_solved_truth_reaches_the_target_power(case_id: str) -> None:
 
 
 def test_freezer_never_imports_the_abkit_engine() -> None:
-    allowed = {"abkit.golden.case", "abkit.golden.ref_cases", "abkit.golden.ref_truth"}
-    package = Path(__file__).resolve().parents[1] / "src/abkit/golden"
+    allowed = {
+        "abkit.golden.case",
+        "abkit.golden.ref_cases",
+        "abkit.golden.ref_truth",
+        "abkit.paths",
+    }
+    package = paths.PACKAGE_DIR / "golden"
     for name in ("freeze_ref.py", "ref_cases.py", "ref_truth.py"):
         tree = ast.parse((package / name).read_text(encoding="utf-8"))
         imported = set()

@@ -17,12 +17,13 @@ from typing import Any
 
 import numpy as np
 
+from abkit import paths
 from abkit.golden.case import load_case, load_dataset
 from abkit.labeling.blind import Look, render_blinded
 from abkit.labeling.kappa import LABELS
 from abkit.readout import Readout, load_readout_input, measure_effect, run_readout
 
-DECIDE_ROOT = Path(__file__).resolve().parents[4] / "golden/decide/v1"
+DECIDE_ROOT = paths.DECIDE_DIR
 SEED = 1115
 KEY_FILE = "key.json"
 READOUTS_DIR = "readouts"

@@ -1,6 +1,6 @@
 """Methods a golden case may name, and the abkit code that answers each one.
 
-``KNOWN_METHODS`` is the contract: ``analytics/golden/README.md`` lists the
+``KNOWN_METHODS`` is the contract: ``golden/README.md`` lists the
 data columns, params and output keys of each. ``IMPLEMENTATIONS`` maps a
 method to an abkit function ``(data, params) -> outputs``; the statistics PRs
 (B2 plan, PR 10 onward) register theirs here. A case whose method has no
