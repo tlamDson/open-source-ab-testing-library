@@ -1,6 +1,6 @@
 # abkit
 
-Experimentation toolkit for TravelPlan: deterministic variant assignment, A/B
+Experimentation toolkit: deterministic variant assignment, A/B
 statistics, causal estimators, uplift and forecasting, and a golden dataset that
 gates the engine in CI.
 

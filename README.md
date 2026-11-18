@@ -1,8 +1,10 @@
 # abkit
 
-Experimentation toolkit for TravelPlan (B2 plan): deterministic variant assignment,
-A/B statistics (Welch, delta method, CUPED, SRM, mSPRT), causal estimators, uplift and
-forecasting, and a golden dataset that gates the engine in CI.
+Experimentation toolkit: deterministic variant assignment, A/B statistics (Welch,
+delta method, CUPED, SRM, mSPRT), causal estimators, uplift and forecasting, and a
+golden dataset that gates the engine in CI.
+
+It was built inside [TravelPlan](https://github.com/tlamDson/TravelPlan), which still uses it.
 
 The PyPI distribution is **`abkit-experiments`** (the name `abkit` on PyPI belongs to
 someone else). The import name and the command stay `abkit`.
@@ -40,7 +42,7 @@ print(f"estimate={result.estimate:.3f} p={result.p_value:.2g} (injected effect: 
 
 ## Results
 
-Every number below is a row of `analytics/runs/runs.csv`, rendered by
+Every number below is a row of `runs/runs.csv`, rendered by
 `python -m abkit.readme_results --write` (a test fails when this block is stale).
 Simulated users are never mixed with real ones.
 
@@ -109,9 +111,9 @@ These rows come from virtual users, counted apart from real users. Each reports 
 
 Modules and commands:
 
-- `abkit.assignment`: deterministic variant assignment. It matches the server
+- `abkit.assignment`: deterministic variant assignment. It matches TravelPlan's server
   (`backend/src/features/experiments/services/assignment.ts`) on all rows of
-  `packages/shared/fixtures/assignment-vectors.json`.
+  `fixtures/assignment-vectors.json`.
 - `abkit.stats`: Welch's t-test, the delta method for ratio metrics, the SRM
   chi-square check (threshold `p < 0.0005`), and power / sample size / MDE for
   the two-sample t-test and two proportions (Cohen's h). Estimates are
@@ -153,7 +155,7 @@ Modules and commands:
   `--real`; the Streamlit app (`[app]` extra) shows the same memo.
 - `abkit.labeling` (PR 15b, G-decide): `abkit decide export` writes 30 blinded
   readouts (28 G-sim cases drawn per group with a fixed seed, plus 2 real Hillstrom
-  readouts) to `analytics/golden/decide/v1/`, with abkit's decision and the case name
+  readouts) to `golden/decide/v1/`, with abkit's decision and the case name
   hidden and every effect shown, also when SRM fails. `abkit decide label` shows them one
   at a time and saves Lam's ship / no ship / investigate to `labels.csv`, resuming where
   it stopped. `abkit decide kappa` reports Cohen's kappa of those labels against the memo
@@ -166,7 +168,7 @@ Modules and commands:
   waits for its reset). Frame: non-fork repositories with 100–2000 stars, the first 300
   search results per creation month 2014-01..2017-12; 400 of them drawn with seed 18.
   Adoption is the oldest default-branch commit touching `.github/workflows`. The compact
-  panel in `analytics/data/actions_panel/` has one row per repo and month 2018-01..2022-12:
+  panel in `data/actions_panel/` has one row per repo and month 2018-01..2022-12:
   merged non-bot PRs created that month, median and mean `log1p` hours to merge, months
   since adoption and `treated`; `repos.csv` lists every sampled repo (also the missing ones)
   and `meta.json` the seed, queries and counts. Search ranks by stars inside the band, so
@@ -183,12 +185,15 @@ Modules and commands:
   merge time. Weighting rows by merged PRs gives -0.337 (CI -0.648 to -0.026, p = 0.034).
   The monthly specs fail the pre-trend test (p = 9.8e-07 for the mean, 0.00099 for the
   median), so monthly event times are not read as causal.
-- `abkit.runs`: the `analytics/runs/runs.csv` ledger. Every number quoted in a
+- `abkit.paths`: every default repository path (`golden/`, `data/`, `runs/`,
+  `fixtures/`). An installed (not editable) package has no checkout around it: set
+  `ABKIT_ROOT` to one.
+- `abkit.runs`: the `runs/runs.csv` ledger. Every number quoted in a
   README must come from a row in that file.
 - `abkit.bench`: runs a named benchmark and appends its result to `runs.csv`.
 - `abkit golden`: runs abkit on every case of a golden dataset (default
-  `analytics/golden/v2`) and prints pass/fail by each case's tolerance. Format,
-  methods and freezing: `analytics/golden/README.md`.
+  `golden/v2`) and prints pass/fail by each case's tolerance. Format,
+  methods and freezing: `golden/README.md`.
 - `abkit.criteo`: the Criteo Uplift v2.1 file (CC BY-NC-SA, kept under
   `D:/data/b2/criteo/`, never committed), read in chunks with its sha256
   checked, arm totals, and a seeded row sample saved as `.npz`.
@@ -214,7 +219,7 @@ Modules and commands:
 - `r/` (optional): an R `testthat` suite that recomputes every G-ref Welch,
   CUPED and delta case with base R (`t.test`, `cov`, `pnorm`) and requires
   `|R - golden| <= 1e-8` on every expected key. Needs R with `testthat` and
-  `jsonlite`; run `Rscript analytics/abkit/r/run.R`. `tests/test_r_crosscheck.py`
+  `jsonlite`; run `Rscript r/run.R`. `tests/test_r_crosscheck.py`
   runs it when `Rscript` is found (`ABKIT_RSCRIPT`, `PATH`, or
   `C:/Program Files/R`) and skips otherwise, so CI (no R) skips it; it also
   skips when `testthat` or `jsonlite` is missing. `test-mutations.R` proves the
@@ -223,22 +228,22 @@ Modules and commands:
   or with a fixed alpha) and on golden answers shifted by 1e-7.
 
 ```bash
-python -m venv analytics/.venv
-analytics/.venv/Scripts/python -m pip install -e "analytics/abkit[dev]"   # bin/ on Linux/macOS
-cd analytics/abkit && ../.venv/Scripts/python -m ruff check . && ../.venv/Scripts/python -m ruff format --check . && ../.venv/Scripts/python -m pytest -q
-analytics/.venv/Scripts/python -m abkit.bench assignment --pr 9
-analytics/.venv/Scripts/python -m abkit.uplift --raw D:/data/b2/criteo/criteo-research-uplift-v2.1.csv.gz --save-sample D:/data/b2/criteo/criteo-uplift-v2.1-10pct-seed20.npz --pr 20   # M8, 5 seeds; later runs: --sample <npz>; --dry-run
-analytics/.venv/Scripts/python -m abkit.peeking --pr 12   # 10,000 A/A x 14 days; --dry-run to print only
-analytics/.venv/Scripts/python -m abkit golden   # latest golden version; --strict: MISSING fails too; --subset ci-fast
-analytics/.venv/Scripts/python -m abkit gate     # 10 planted mutants vs ci-fast (M10); --full; --record --pr 15a
-analytics/.venv/Scripts/python -m abkit readout analytics/golden/v2/sim-srm/loss-15-aa   # memo; --out memo.md
-analytics/.venv/Scripts/python -m abkit decide label            # G-B2-3: label the 30 blinded readouts
-analytics/.venv/Scripts/python -m abkit decide kappa --record   # M11 after every readout has a label
-analytics/.venv/Scripts/python -m pip install -e "analytics/abkit[app]"   # Streamlit; CI skips the app tests
-analytics/.venv/Scripts/python -m streamlit run analytics/abkit/src/abkit/readout/app.py
-analytics/.venv/Scripts/python -m abkit.cuped_check D:/data/b2/hillstrom.csv --pr 11   # M4
-analytics/.venv/Scripts/python -m simkit.generate --seed 42 --users 1000 --days 112 --out analytics/data/simulated/m9
-analytics/.venv/Scripts/python -m abkit.forecast analytics/data/simulated/m9/events.jsonl     --simulated --pr 21 --seed 42 --initial 56 --step 1 --horizon 7   # appends M9 rows; --dry-run
+python -m venv .venv
+.venv/Scripts/python -m pip install -e ".[dev]"   # bin/ on Linux/macOS
+.venv/Scripts/python -m ruff check . && .venv/Scripts/python -m ruff format --check . && .venv/Scripts/python -m pytest -q
+.venv/Scripts/python -m abkit.bench assignment --pr 9
+.venv/Scripts/python -m abkit.uplift --raw D:/data/b2/criteo/criteo-research-uplift-v2.1.csv.gz --save-sample D:/data/b2/criteo/criteo-uplift-v2.1-10pct-seed20.npz --pr 20   # M8, 5 seeds; later runs: --sample <npz>; --dry-run
+.venv/Scripts/python -m abkit.peeking --pr 12   # 10,000 A/A x 14 days; --dry-run to print only
+.venv/Scripts/python -m abkit golden   # latest golden version; --strict: MISSING fails too; --subset ci-fast
+.venv/Scripts/python -m abkit gate     # 10 planted mutants vs ci-fast (M10); --full; --record --pr 15a
+.venv/Scripts/python -m abkit readout golden/v2/sim-srm/loss-15-aa   # memo; --out memo.md
+.venv/Scripts/python -m abkit decide label            # G-B2-3: label the 30 blinded readouts
+.venv/Scripts/python -m abkit decide kappa --record   # M11 after every readout has a label
+.venv/Scripts/python -m pip install -e ".[app]"   # Streamlit only; [dev] includes it
+.venv/Scripts/python -m streamlit run src/abkit/readout/app.py
+.venv/Scripts/python -m abkit.cuped_check D:/data/b2/hillstrom.csv --pr 11   # M4
+.venv/Scripts/python -m simkit.generate --seed 42 --users 1000 --days 112 --out data/simulated/m9   # simkit is TravelPlan's
+.venv/Scripts/python -m abkit.forecast data/simulated/m9/events.jsonl     --simulated --pr 21 --seed 42 --initial 56 --step 1 --horizon 7   # appends M9 rows; --dry-run
 ```
 
 `abkit.forecast` makes you say `--simulated` or `--real` (no default) and refuses
