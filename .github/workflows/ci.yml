@@ -27,3 +27,10 @@ jobs:
           python -m ruff format --check .
       - name: Test
         run: python -m pytest -q
+      # Golden gate: G-ref + one G-sim case per group (subset ci-fast), then the 10 mutants
+      # planted in the engine must each fail it (M10). Every case runs nightly
+      # (golden-nightly.yml).
+      - name: Golden gate (G-ref + G-sim ci-fast)
+        run: python -m abkit golden --subset ci-fast --strict
+      - name: Golden gate mutants (M10)
+        run: python -m abkit gate

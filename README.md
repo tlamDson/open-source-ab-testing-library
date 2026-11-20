@@ -1,5 +1,7 @@
 # abkit
 
+[![CI](https://github.com/tlamDson/open-source-statistical-experimentation-library/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/tlamDson/open-source-statistical-experimentation-library/actions/workflows/ci.yml)
+
 Experimentation toolkit: deterministic variant assignment, A/B statistics (Welch,
 delta method, CUPED, SRM, mSPRT), causal estimators, uplift and forecasting, and a
 golden dataset that gates the engine in CI.
