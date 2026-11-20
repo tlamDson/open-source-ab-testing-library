@@ -1,4 +1,4 @@
-"""Readout parameters: the ``readout`` params of ``analytics/golden/README.md``, validated."""
+"""Readout parameters: the ``readout`` params of ``golden/README.md``, validated."""
 
 from __future__ import annotations
 

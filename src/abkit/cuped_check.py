@@ -6,7 +6,7 @@ Mens E-Mail is compared with No E-Mail for each outcome in
 ``HILLSTROM_OUTCOMES``, adjusted by its pre-period covariate. Users are
 resampled within each arm ``n_boot`` times; the variance of the CUPED
 estimate over the variance of the unadjusted one should be ``1 - R²``.
-Three rows per outcome go to ``analytics/runs/runs.csv`` (metric M4, real
+Three rows per outcome go to ``runs/runs.csv`` (metric M4, real
 users, not simulated).
 """
 

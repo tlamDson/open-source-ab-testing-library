@@ -11,7 +11,7 @@ before adoption, which leaves their monthly cohort without a reference period). 
 change one thing each: controls, weights, monthly periods, the median outcome, a placebo
 adoption four quarters early, and the pooled and static TWFE that staggered timing biases.
 
-Rows go to ``analytics/runs/runs.csv`` with ``metric_id`` M7; the repositories are real, so
+Rows go to ``runs/runs.csv`` with ``metric_id`` M7; the repositories are real, so
 ``simulated`` is false.
 """
 

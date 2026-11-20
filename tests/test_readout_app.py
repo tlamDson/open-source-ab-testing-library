@@ -1,14 +1,16 @@
-"""The Streamlit readout app (``[app]`` extra). CI installs core + dev only, so it skips there."""
+"""The Streamlit readout app (``[app]`` extra, which ``[dev]`` includes)."""
 
 from pathlib import Path
 
 import pytest
 from conftest import GOLDEN_LATEST
 
+from abkit import paths
+
 pytest.importorskip("streamlit", reason="the [app] extra (streamlit) is not installed")
 from streamlit.testing.v1 import AppTest  # noqa: E402
 
-APP = Path(__file__).resolve().parents[1] / "src/abkit/readout/app.py"
+APP = paths.PACKAGE_DIR / "readout/app.py"
 
 
 def _app() -> AppTest:

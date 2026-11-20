@@ -6,12 +6,13 @@ import argparse
 import sys
 from pathlib import Path
 
+from abkit import paths
 from abkit.labeling.agreement import agreement, to_run_records
 from abkit.labeling.export import DECIDE_ROOT, LABELS_FILE, export_blinded
 from abkit.labeling.session import label_session
 from abkit.runs import RUNS_CSV_PATH, append_run
 
-_GOLDEN_LATEST = Path(__file__).resolve().parents[4] / "golden/v2"
+GOLDEN_LATEST = paths.GOLDEN_LATEST
 
 
 def _labels(args: argparse.Namespace) -> Path:
@@ -53,7 +54,7 @@ def add_decide(commands) -> None:
     decide = commands.add_parser("decide", help="G-decide: blinded readouts, labels, kappa")
     sub = decide.add_subparsers(dest="decide_command", required=True)
     export = sub.add_parser("export", help="write the blinded readouts and their key")
-    export.add_argument("--golden", type=Path, default=_GOLDEN_LATEST)
+    export.add_argument("--golden", type=Path, default=GOLDEN_LATEST)
     export.add_argument("--out", type=Path, default=DECIDE_ROOT)
     export.add_argument("--force", action="store_true", help="replace an earlier export")
     export.set_defaults(handler=_run(_export))

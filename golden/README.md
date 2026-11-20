@@ -4,10 +4,10 @@ Every case has a known answer that **abkit did not compute**, so the engine can
 never vouch for itself (B2 plan, "Golden dataset").
 
 ```bash
-analytics/.venv/Scripts/python -m abkit golden                       # latest (v2); exit 1 on FAIL/ERROR
-analytics/.venv/Scripts/python -m abkit golden analytics/golden/v2 --strict   # MISSING fails too
-analytics/.venv/Scripts/python -m abkit golden --subset ci-fast             # CI gate subset
-analytics/.venv/Scripts/python -m abkit gate                                # 10 planted mutants must be blocked
+.venv/Scripts/python -m abkit golden                       # latest (v2); exit 1 on FAIL/ERROR
+.venv/Scripts/python -m abkit golden golden/v2 --strict   # MISSING fails too
+.venv/Scripts/python -m abkit golden --subset ci-fast             # CI gate subset
+.venv/Scripts/python -m abkit gate                                # 10 planted mutants must be blocked
 ```
 
 Statuses: `PASS` (every expected key within tolerance, decision equal),
@@ -114,13 +114,14 @@ The required job `abkit Lint + Test` runs, after pytest:
    interpreter. A mutant is blocked when some case fails. Exit 1 means a mutant
    survived. Exit 2 means the clean copy does not pass, or a mutant crashed before any
    case ran: a crash proves nothing, so it does not count as blocked.
-3. G-event: `simkit` `tests/test_catalog.py` replays `packages/shared/fixtures/golden-events/`.
+3. G-event (TravelPlan only): `simkit` `tests/test_catalog.py` replays
+   `packages/shared/fixtures/golden-events/`.
 
-`.github/workflows/abkit-golden-nightly.yml` runs every case (`abkit golden --strict`),
+In TravelPlan, `.github/workflows/abkit-golden-nightly.yml` runs every case (`abkit golden --strict`),
 the mutants against every case (`abkit gate --full`) and the `SIMKIT_GOLDEN_FULL=1`
 rebuild. It is not a required check, and GitHub fires its `schedule` only from `main`.
 
-M10 in `analytics/runs/runs.csv` (`abkit gate --record --pr 15a`): 10 of 10 mutants
+M10 in `runs/runs.csv` (`abkit gate --record --pr 15a`): 10 of 10 mutants
 blocked by the ci-fast gate (none without a gate). On every `v2` case, 29/29 G-ref and
 G-public cases pass, and 50/50 G-sim cases (simulated, virtual users) pass.
 
@@ -137,8 +138,8 @@ Closed-form cases have tolerance `abs 1e-10, rel 1e-9`; root-solved power
 cases `rel 1e-6`. R cross-checks these again in PR 23.
 
 ```bash
-analytics/.venv/Scripts/python -m pip install -e "analytics/abkit[dev,golden]"   # adds statsmodels
-analytics/.venv/Scripts/python -m abkit.golden.freeze_ref analytics/golden/v3    # refuses to overwrite without --force
+.venv/Scripts/python -m pip install -e ".[dev,golden]"   # adds statsmodels
+.venv/Scripts/python -m abkit.golden.freeze_ref golden/v3    # refuses to overwrite without --force
 ```
 
 ### v2 (B2 plan, PR 10)
@@ -155,7 +156,7 @@ and `tests/test_golden_reference.py` checks that.
   boost `nct` and from quadrature. v1's `rel 1e-9` was stricter than its own
   reference.
 
-`abkit golden analytics/golden/v1` still fails those two cases on purpose
+`abkit golden golden/v1` still fails those two cases on purpose
 (`tests/test_golden_core_stats.py` pins this).
 
 `tests/test_golden_reference.py` regenerates the data and recomputes the truth
@@ -185,7 +186,7 @@ new version. The raw file is not committed (B2 plan: external data under
 
 ```bash
 curl -o D:/data/b2/hillstrom.csv http://www.minethatdata.com/Kevin_Hillstrom_MineThatData_E-MailAnalytics_DataMiningChallenge_2008.03.20.csv
-analytics/.venv/Scripts/python -m abkit.golden.freeze_public D:/data/b2/hillstrom.csv analytics/golden/v3   # checks the sha256
+.venv/Scripts/python -m abkit.golden.freeze_public D:/data/b2/hillstrom.csv golden/v3   # checks the sha256
 ```
 
 `tests/test_golden_public.py` refreezes into a temp dir and compares bytes
@@ -217,8 +218,8 @@ naive interim look would ship), `sim-long-tail` ×5 (lognormal booking value).
   `source.screening` records the attempts, so the selection is visible.
 
 ```bash
-analytics/.venv/Scripts/python -m pip install -e "analytics/simkit[dev]"   # after abkit
-analytics/.venv/Scripts/python -m simkit.freeze_golden analytics/golden/v3   # refuses to overwrite without --force
+.venv/Scripts/python -m pip install -e "analytics/simkit[dev]"   # in a TravelPlan checkout, after abkit
+.venv/Scripts/python -m simkit.freeze_golden golden/v3   # refuses to overwrite without --force
 ```
 
 `simkit/tests/test_golden_sim.py` re-screens every committed case from its
@@ -246,7 +247,7 @@ outside the repo (`D:/data/b2/lalonde`); `tests/test_golden_causal.py` checks th
 data against them when present, and with NumPy alone that it reproduces 1,794, 633 and −15,205.
 
 ```bash
-analytics/.venv/Scripts/python -m abkit.golden.freeze_lalonde D:/data/b2/lalonde   # --force to rewrite
+.venv/Scripts/python -m abkit.golden.freeze_lalonde D:/data/b2/lalonde   # --force to rewrite
 ```
 
 ## G-public Criteo (`v2/criteo/`, B2 plan, PR 20)
@@ -267,7 +268,7 @@ the two arm totals. To re-freeze from the raw file (the sha256 is checked; the
 file is Criteo's own copy on Hugging Face, `abkit.criteo.CRITEO_MIRROR_URL`):
 
 ```bash
-analytics/.venv/Scripts/python -m abkit.golden.freeze_criteo D:/data/b2/criteo/criteo-research-uplift-v2.1.csv.gz --root analytics/golden/v3
+.venv/Scripts/python -m abkit.golden.freeze_criteo D:/data/b2/criteo/criteo-research-uplift-v2.1.csv.gz --root golden/v3
 ```
 
 ## G-decide (`decide/v1/`, 30 blinded readouts, B2 plan, PR 15b)
@@ -288,7 +289,7 @@ this directory, so it is never edited by hand: `abkit decide export --force` rew
 and refuses while a `labels.csv` exists.
 
 ```bash
-analytics/.venv/Scripts/python -m abkit decide label            # s / n / i, q to stop; resumes
-analytics/.venv/Scripts/python -m abkit decide kappa            # kappa vs memo and vs p-only
-analytics/.venv/Scripts/python -m abkit decide kappa --record   # append the two M11 rows
+.venv/Scripts/python -m abkit decide label            # s / n / i, q to stop; resumes
+.venv/Scripts/python -m abkit decide kappa            # kappa vs memo and vs p-only
+.venv/Scripts/python -m abkit decide kappa --record   # append the two M11 rows
 ```

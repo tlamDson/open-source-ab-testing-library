@@ -5,8 +5,8 @@ build-backend = "setuptools.build_meta"
 [project]
 # The PyPI name "abkit" belongs to someone else. The import name stays `abkit`.
 name = "abkit-experiments"
-version = "0.1.0"
-description = "Experimentation toolkit for TravelPlan: assignment, A/B statistics, simulation checks."
+version = "0.2.0"
+description = "Experimentation toolkit: assignment, A/B statistics, causal estimators, simulation checks."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
@@ -24,9 +24,9 @@ dependencies = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/tlamDson/TravelPlan/tree/main/analytics/abkit/docs"
-Source = "https://github.com/tlamDson/TravelPlan/tree/main/analytics/abkit"
-Issues = "https://github.com/tlamDson/TravelPlan/issues"
+Documentation = "https://github.com/tlamDson/open-source-statistical-experimentation-library/tree/main/docs"
+Source = "https://github.com/tlamDson/open-source-statistical-experimentation-library"
+Issues = "https://github.com/tlamDson/open-source-statistical-experimentation-library/issues"
 
 [project.optional-dependencies]
 # The budget LP of abkit.uplift (PuLP ships the CBC solver in its wheel).
@@ -38,17 +38,17 @@ forecast = [
   "pandas==2.2.3",
   "statsmodels==0.14.4",
 ]
-# The Streamlit readout app (abkit/readout/app.py); CI skips its tests.
+# The Streamlit readout app (abkit/readout/app.py).
 app = [
   "streamlit==1.40.2",
 ]
-# dev includes uplift and forecast so the CI job (core + dev) runs their tests.
+# dev pulls every extra the tests import, so `pip install -e ".[dev]"` runs the whole suite.
+# setuptools is the build-system pin, for the wheel test.
 dev = [
-  "pandas==2.2.3",
-  "pulp==2.9.0",
+  "abkit-experiments[uplift,forecast,app,docs]",
   "pytest==8.3.4",
   "ruff==0.8.4",
-  "statsmodels==0.14.4",
+  "setuptools==75.6.0",
 ]
 # The docs site (mkdocs.yml); `mkdocs build --strict`.
 docs = [

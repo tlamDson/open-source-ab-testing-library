@@ -1,10 +1,14 @@
 """The 10 bugs planted on purpose in the abkit engine (B2 plan, PR 15a, M10)."""
 
+import os
 import re
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
 
+from abkit import paths
 from abkit.golden.mutants import MUTANTS, PACKAGE_DIR, Mutant, MutantError, write_package
 
 
@@ -55,24 +59,29 @@ def test_each_mutant_still_applies_exactly_once_and_compiles(mutant: Mutant) -> 
 
 def test_clean_copy_is_byte_identical_to_the_package(tmp_path: Path) -> None:
     copy = write_package(tmp_path)
-    assert copy == tmp_path / "analytics/abkit/src/abkit"
+    assert copy == tmp_path / "src/abkit"
     assert _tree(copy) == _tree(PACKAGE_DIR)
 
 
-def test_copy_keeps_every_module_level_parents_index_inside_dest(tmp_path: Path) -> None:
+def test_the_copy_resolves_its_repository_root_to_dest(tmp_path: Path) -> None:
     # Regression: a copy at /tmp/<x>/abkit made parents[4] of abkit/golden/*.py run past "/"
-    # (IndexError on import), so on Linux CI every mutant came back BROKEN.
+    # (IndexError on import), so on Linux CI every mutant came back BROKEN. Now only
+    # abkit.paths looks at its own location, and in the copy it lands on dest.
     copy = write_package(tmp_path)
-    deepest = max(
-        int(n)
-        for p in copy.rglob("*.py")
-        for n in re.findall(r"parents\[(\d+)\]", p.read_text(encoding="utf-8"))
+    probe = (
+        "import sys; sys.path.insert(0, sys.argv[1]); "
+        "from abkit import paths; print(paths.REPO_ROOT)"
     )
-    assert deepest == 4
-    for p in copy.rglob("*.py"):
-        text = p.read_text(encoding="utf-8")
-        for n in {int(n) for n in re.findall(r"parents\[(\d+)\]", text)}:
-            assert p.resolve().parents[n].is_relative_to(tmp_path.resolve()), (p, n)
+    env = {k: v for k, v in os.environ.items() if k != paths.ROOT_ENV}
+    proc = subprocess.run(
+        [sys.executable, "-c", probe, str(copy.parent)],
+        capture_output=True,
+        text=True,
+        env=env,
+        timeout=60,
+    )
+    assert proc.returncode == 0, proc.stderr
+    assert Path(proc.stdout.strip()) == tmp_path.resolve()
 
 
 def test_mutated_copy_differs_only_in_the_target_file(tmp_path: Path) -> None:

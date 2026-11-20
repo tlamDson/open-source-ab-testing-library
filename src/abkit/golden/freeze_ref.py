@@ -21,9 +21,10 @@ from pathlib import Path
 from abkit.golden.case import GoldenFormatError, load_case, read_csv_columns
 from abkit.golden.ref_cases import REF_CASES, Columns, RefCase
 from abkit.golden.ref_truth import compute_reference
+from abkit.paths import GOLDEN_LATEST
 
 GENERATOR = "abkit.golden.freeze_ref"
-DEFAULT_ROOT = Path(__file__).resolve().parents[4] / "golden/v2"
+DEFAULT_ROOT = GOLDEN_LATEST
 
 
 def render_csv(columns: Columns) -> str:

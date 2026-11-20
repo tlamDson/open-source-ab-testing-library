@@ -1,4 +1,4 @@
-"""The committed Actions panel (``analytics/data/actions_panel``) matches its meta and runs.csv."""
+"""The committed Actions panel (``data/actions_panel``) matches its meta and runs.csv."""
 
 import csv
 import json
@@ -16,8 +16,8 @@ def _table(name: str) -> list[dict[str, str]]:
         return list(csv.DictReader(fh))
 
 
-def test_the_default_panel_dir_is_committed_under_analytics_data() -> None:
-    assert ACTIONS_PANEL_DIR == REPO_ROOT / "analytics/data/actions_panel"
+def test_the_default_panel_dir_is_committed_under_data() -> None:
+    assert ACTIONS_PANEL_DIR == REPO_ROOT / "data/actions_panel"
 
 
 def test_the_committed_panel_is_the_400_repo_seed_18_sample() -> None:

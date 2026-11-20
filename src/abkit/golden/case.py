@@ -1,4 +1,4 @@
-"""Golden case format and loader (``analytics/golden/README.md`` documents it).
+"""Golden case format and loader (``golden/README.md`` documents it).
 
 A dataset is ``<root>/<group>/<case>/`` directories, each with a ``truth.json``
 and, unless the case is purely parametric, a ``data.csv``. Every field of
@@ -21,7 +21,7 @@ import numpy as np
 SCHEMA_VERSION = 1
 TRUTH_FILE = "truth.json"
 
-#: Methods a case may name; ``analytics/golden/README.md`` documents each one.
+#: Methods a case may name; ``golden/README.md`` documents each one.
 KNOWN_METHODS: frozenset[str] = frozenset(
     {
         "welch_ttest",

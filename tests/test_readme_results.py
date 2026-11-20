@@ -4,10 +4,10 @@ import csv
 import re
 import subprocess
 import sys
-from pathlib import Path
 
 import pytest
 
+from abkit import paths
 from abkit.readme_results import (
     RESULT_SPECS,
     ResultSpec,
@@ -17,9 +17,8 @@ from abkit.readme_results import (
 )
 from abkit.runs import RUNS_CSV_PATH
 
-ABKIT_DIR = Path(__file__).resolve().parents[1]
-README = ABKIT_DIR / "README.md"
-DOCS_RESULTS = ABKIT_DIR / "docs/results.md"
+README = paths.README
+DOCS_RESULTS = paths.DOCS_DIR / "results.md"
 
 
 def row(metric, value, unit="share", simulated="false", notes="", n="100", metric_id="M1"):
@@ -103,6 +102,12 @@ def test_committed_results_block_is_what_runs_csv_produces(path):
     block = render_results(_runs_rows(), RESULT_SPECS)
     text = path.read_text(encoding="utf-8")
     assert apply_block(text, block) == text, f"{path.name} is stale: abkit-results --write"
+
+
+def test_readme_has_no_mermaid_block():
+    text = README.read_text(encoding="utf-8")
+    assert "```mermaid" not in text
+    assert "xychart" not in text
 
 
 def test_every_spec_resolves_in_the_committed_runs_csv():

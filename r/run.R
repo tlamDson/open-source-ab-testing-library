@@ -1,5 +1,5 @@
-# Run the R cross-check: Rscript analytics/abkit/r/run.R  (from any directory).
-# ABKIT_GOLDEN_DIR overrides the golden dataset (default analytics/golden/v2).
+# Run the R cross-check: Rscript r/run.R  (from any directory).
+# ABKIT_GOLDEN_DIR overrides the golden dataset (default golden/v2).
 args <- commandArgs(trailingOnly = FALSE)
 script <- sub("^--file=", "", args[grep("^--file=", args)])
 here <- dirname(normalizePath(script))

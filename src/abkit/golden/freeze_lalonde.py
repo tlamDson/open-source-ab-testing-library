@@ -25,8 +25,9 @@ from datetime import date
 from pathlib import Path
 
 from abkit.golden.case import SCHEMA_VERSION, TRUTH_FILE
+from abkit.paths import GOLDEN_LATEST
 
-DEFAULT_ROOT = Path(__file__).resolve().parents[4] / "golden/v2"
+DEFAULT_ROOT = GOLDEN_LATEST
 PAPER_URL = "https://www.nber.org/papers/w6586"
 DATA_URL = "https://users.nber.org/~rdehejia/data/.nswdata2.html"
 #: Raw files as served on 2026-11-13 from https://users.nber.org/~rdehejia/data/<name>.

@@ -14,11 +14,12 @@ import shutil
 from dataclasses import dataclass
 from pathlib import Path
 
-PACKAGE_DIR = Path(__file__).resolve().parents[1]
-#: Where the copy goes under ``dest``: the repo layout, because modules resolve repo files
-#: from ``Path(__file__).parents[N]`` at import time (N up to 4). In a shallow temp dir such
-#: as ``/tmp/x/abkit`` that index runs past ``/`` and the copy dies with ``IndexError``.
-COPY_LAYOUT = Path("analytics/abkit/src/abkit")
+from abkit import paths
+
+PACKAGE_DIR = paths.PACKAGE_DIR
+#: Where the copy goes under ``dest``: the checkout layout, so the copy's ``abkit.paths``
+#: resolves its root to ``dest`` (``<root>/src/abkit``) and never to a directory above it.
+COPY_LAYOUT = Path("src/abkit")
 
 
 class MutantError(ValueError):

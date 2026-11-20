@@ -11,12 +11,13 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
+from abkit import paths
 from abkit.actions.build import BuildConfig, build_actions_panel, summary_records
 from abkit.actions.gh import GhClient, GhError
 from abkit.bench import _git_sha
 from abkit.runs import RUNS_CSV_PATH, append_run
 
-ACTIONS_PANEL_DIR = Path(__file__).resolve().parents[4] / "data/actions_panel"
+ACTIONS_PANEL_DIR = paths.ACTIONS_PANEL_DIR
 
 
 def _actions_panel(args: argparse.Namespace) -> int:

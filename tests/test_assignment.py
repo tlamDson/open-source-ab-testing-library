@@ -28,7 +28,7 @@ HOLDOUT_DEF = {
 
 
 def test_vectors_path_points_at_the_shared_fixture(repo_root: Path) -> None:
-    assert repo_root / "packages/shared/fixtures/assignment-vectors.json" == VECTORS_PATH
+    assert repo_root / "fixtures/assignment-vectors.json" == VECTORS_PATH
 
 
 def test_every_shared_vector_matches_python_assignment() -> None:

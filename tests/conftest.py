@@ -7,11 +7,13 @@ from typing import Any
 import numpy as np
 import pytest
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
-GOLDEN_V1 = REPO_ROOT / "analytics/golden/v1"
+from abkit import paths
+
+REPO_ROOT = paths.REPO_ROOT
+GOLDEN_V1 = paths.GOLDEN_DIR / "v1"
 #: v2 re-froze the root-solved t-test power cases (v1 kept for comparison).
-GOLDEN_V2 = REPO_ROOT / "analytics/golden/v2"
-GOLDEN_LATEST = GOLDEN_V2
+GOLDEN_V2 = paths.GOLDEN_DIR / "v2"
+GOLDEN_LATEST = paths.GOLDEN_LATEST
 
 BASE_TRUTH: dict[str, Any] = {
     "schema_version": 1,
