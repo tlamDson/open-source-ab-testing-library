@@ -14,12 +14,10 @@ import abkit
 from abkit import paths
 
 ABKIT_DIR = paths.REPO_ROOT
-WORKFLOW = ABKIT_DIR / ".github/workflows/release-abkit.yml"
+WORKFLOW = ABKIT_DIR / ".github/workflows/release.yml"
+CHANGELOG = ABKIT_DIR / "CHANGELOG.md"
 PYPROJECT = tomllib.loads((ABKIT_DIR / "pyproject.toml").read_text(encoding="utf-8"))
-#: The owner sets up publishing; until the workflow is committed here its checks wait.
-needs_workflow = pytest.mark.skipif(
-    not WORKFLOW.is_file(), reason="release-abkit.yml is not set up in this repository yet"
-)
+REPO_URL = "https://github.com/tlamDson/open-source-statistical-experimentation-library"
 
 
 def _workflow() -> str:
@@ -98,7 +96,6 @@ def test_wheel_has_the_abkit_package_and_distribution_metadata(tmp_path):
     assert any(n.endswith(".dist-info/entry_points.txt") for n in names)
 
 
-@needs_workflow
 def test_release_workflow_is_tag_triggered_only():
     trigger = _workflow().split("jobs:")[0]
     assert re.search(r"tags:\s*\n\s*-\s*[\"']?abkit-v\*", trigger)
@@ -106,7 +103,6 @@ def test_release_workflow_is_tag_triggered_only():
     assert "workflow_dispatch" not in trigger
 
 
-@needs_workflow
 def test_release_publishes_through_trusted_publishing_without_a_token():
     text = _workflow()
     assert re.search(r"environment:\s*\n\s*name:\s*pypi\b", text)
@@ -116,7 +112,6 @@ def test_release_publishes_through_trusted_publishing_without_a_token():
         assert forbidden not in text, forbidden
 
 
-@needs_workflow
 def test_release_id_token_is_only_on_the_publish_job():
     text = _workflow()
     head, publish = text.split("  publish:")
@@ -125,17 +120,38 @@ def test_release_id_token_is_only_on_the_publish_job():
     assert re.search(r"permissions:\s*\n\s*id-token:\s*write", publish)
 
 
-@needs_workflow
 def test_release_checks_the_tag_against_the_package_version_before_building():
     text = _workflow()
     assert "GITHUB_REF_NAME" in text
-    assert "abkit-v" in text
+    assert re.search(r'expected="v\$\(', text)
+    assert "abkit-v" not in text
     assert text.index("GITHUB_REF_NAME") < text.index("python -m build")
 
 
-@needs_workflow
 def test_release_actions_are_pinned_to_a_full_version():
     uses = re.findall(r"uses:\s*(\S+)", _workflow())
     assert uses
     for ref in uses:
         assert re.search(r"@(v\d+(\.\d+)*|[0-9a-f]{40})$", ref), ref
+
+
+def test_release_workflow_builds_from_the_repository_root():
+    text = _workflow()
+    assert "analytics/abkit" not in text
+    assert "working-directory" not in text
+    assert re.search(r"path:\s*dist/", text)
+
+
+def test_version_is_0_2_0():
+    assert PYPROJECT["project"]["version"] == "0.2.0"
+
+
+def test_project_urls_point_at_this_repository():
+    for url in PYPROJECT["project"]["urls"].values():
+        assert url.startswith(REPO_URL), url
+
+
+def test_changelog_has_an_entry_for_the_current_version():
+    version = PYPROJECT["project"]["version"]
+    text = CHANGELOG.read_text(encoding="utf-8")
+    assert re.search(rf"^## \[?{re.escape(version)}\]?", text, flags=re.M)
