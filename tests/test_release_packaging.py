@@ -98,7 +98,7 @@ def test_wheel_has_the_abkit_package_and_distribution_metadata(tmp_path):
 
 def test_release_workflow_is_tag_triggered_only():
     trigger = _workflow().split("jobs:")[0]
-    assert re.search(r"tags:\s*\n\s*-\s*[\"']?abkit-v\*", trigger)
+    assert re.search(r"tags:\s*\n\s*-\s*[\"']?v\*", trigger)
     assert "pull_request" not in trigger and "branches" not in trigger
     assert "workflow_dispatch" not in trigger
 
@@ -137,7 +137,7 @@ def test_release_actions_are_pinned_to_a_full_version():
 
 def test_release_workflow_builds_from_the_repository_root():
     text = _workflow()
-    assert "analytics/abkit" not in text
+    assert "analytics/" not in text
     assert "working-directory" not in text
     assert re.search(r"path:\s*dist/", text)
 
