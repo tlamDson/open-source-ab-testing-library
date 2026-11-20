@@ -1,4 +1,4 @@
-site_name: abkit
+site_name: Open-Source Statistical Experimentation Library
 site_description: Experimentation toolkit for A/B tests and causal estimates
 docs_dir: docs
 strict: true

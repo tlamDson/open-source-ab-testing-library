@@ -24,9 +24,9 @@ dependencies = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/tlamDson/open-source-ab-testing-library/tree/main/docs"
-Source = "https://github.com/tlamDson/open-source-ab-testing-library"
-Issues = "https://github.com/tlamDson/open-source-ab-testing-library/issues"
+Documentation = "https://github.com/tlamDson/open-source-statistical-experimentation-library/tree/main/docs"
+Source = "https://github.com/tlamDson/open-source-statistical-experimentation-library"
+Issues = "https://github.com/tlamDson/open-source-statistical-experimentation-library/issues"
 
 [project.optional-dependencies]
 # The budget LP of abkit.uplift (PuLP ships the CBC solver in its wheel).
