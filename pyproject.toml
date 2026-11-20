@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 # The PyPI name "abkit" belongs to someone else. The import name stays `abkit`.
 name = "abkit-experiments"
-version = "0.1.0"
+version = "0.2.0"
 description = "Experimentation toolkit: assignment, A/B statistics, causal estimators, simulation checks."
 readme = "README.md"
 requires-python = ">=3.11"
