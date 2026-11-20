@@ -1,4 +1,6 @@
-# abkit
+# Open-Source Statistical Experimentation Library
+
+The package is **`abkit`** (PyPI distribution **`abkit-experiments`**; the import name and the command stay `abkit`).
 
 Experimentation toolkit: deterministic variant assignment, A/B statistics (Welch,
 delta method, CUPED, SRM, mSPRT), causal estimators, uplift and forecasting, and a
@@ -6,8 +8,7 @@ golden dataset that gates the engine in CI.
 
 It was built inside [TravelPlan](https://github.com/tlamDson/TravelPlan), which still uses it.
 
-The PyPI distribution is **`abkit-experiments`** (the name `abkit` on PyPI belongs to
-someone else). The import name and the command stay `abkit`.
+The distribution is not called `abkit` because that name on PyPI belongs to someone else.
 
 ```bash
 pip install abkit-experiments            # core: numpy, scipy

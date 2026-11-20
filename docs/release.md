@@ -15,6 +15,6 @@ its tests in `tests/test_release_packaging.py` skip until then.
    then the `publish` job (GitHub environment `pypi`) uploads them.
 
 One-time setup, by the repository owner: on PyPI add a pending trusted publisher for
-project `abkit-experiments` (owner `tlamDson`, repository `open-source-ab-testing-library`, workflow
+project `abkit-experiments` (owner `tlamDson`, repository `open-source-statistical-experimentation-library`, workflow
 `release-abkit.yml`, environment `pypi`), and create the `pypi` environment in the
 repository settings (a required reviewer there makes every release a manual approval).
